@@ -77,7 +77,7 @@ export default function Base64Tool() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-slide-up">
+    <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -89,23 +89,6 @@ export default function Base64Tool() {
             Encode text to Base64 or decode Base64 strings
           </p>
         </div>
-      </div>
-
-      {/* Input */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          Input {mode === "encode" ? "(Plain Text)" : "(Base64 String)"}
-        </label>
-        <Textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={
-            mode === "encode"
-              ? "Enter text to encode..."
-              : "Enter Base64 string to decode..."
-          }
-          className="min-h-[180px]"
-        />
       </div>
 
       {/* Action Buttons */}
@@ -134,34 +117,54 @@ export default function Base64Tool() {
         </Button>
       </div>
 
-      {/* Output */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium flex items-center justify-between">
-          <span>
-            Output {mode === "encode" ? "(Base64)" : "(Plain Text)"}
-          </span>
-          {output && (
-            <Button variant="ghost" size="sm" onClick={handleCopy} className="gap-1">
-              {copied ? (
-                <>
-                  <Check className="h-3 w-3" />
-                  Copied
-                </>
-              ) : (
-                <>
-                  <Copy className="h-3 w-3" />
-                  Copy
-                </>
-              )}
-            </Button>
-          )}
-        </label>
-        <Textarea
-          value={output}
-          readOnly
-          placeholder="Result will appear here..."
-          className="min-h-[180px] bg-muted/50"
-        />
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Input */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">
+            Input {mode === "encode" ? "(Plain Text)" : "(Base64 String)"}
+          </label>
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={
+              mode === "encode"
+                ? "Enter text to encode..."
+                : "Enter Base64 string to decode..."
+            }
+            className="min-h-[300px] lg:min-h-[400px]"
+          />
+        </div>
+
+        {/* Output */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium flex items-center justify-between">
+            <span>
+              Output {mode === "encode" ? "(Base64)" : "(Plain Text)"}
+            </span>
+            {output && (
+              <Button variant="ghost" size="sm" onClick={handleCopy} className="gap-1">
+                {copied ? (
+                  <>
+                    <Check className="h-3 w-3" />
+                    Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3 w-3" />
+                    Copy
+                  </>
+                )}
+              </Button>
+            )}
+          </label>
+          <Textarea
+            value={output}
+            readOnly
+            placeholder="Result will appear here..."
+            className="min-h-[300px] lg:min-h-[400px] bg-muted/50"
+          />
+        </div>
       </div>
 
       {/* Info Card */}

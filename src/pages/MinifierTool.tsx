@@ -2,6 +2,8 @@ import { useState } from "react";
 import { FileCode, Copy, Check, Loader2, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -10,53 +12,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
+import { minify as terserMinify } from "terser";
 
 type CodeType = "html" | "css" | "js";
 
 // Simple browser-compatible minifiers
 const minifyHTML = (html: string): string => {
   return html
-    // Remove HTML comments
     .replace(/<!--[\s\S]*?-->/g, '')
-    // Remove whitespace between tags
     .replace(/>\s+</g, '><')
-    // Remove leading/trailing whitespace
     .trim()
-    // Collapse multiple spaces to single
     .replace(/\s{2,}/g, ' ');
 };
 
 const minifyCSS = (css: string): string => {
   return css
-    // Remove comments
     .replace(/\/\*[\s\S]*?\*\//g, '')
-    // Remove whitespace around selectors and braces
     .replace(/\s*{\s*/g, '{')
     .replace(/\s*}\s*/g, '}')
     .replace(/\s*;\s*/g, ';')
     .replace(/\s*:\s*/g, ':')
     .replace(/\s*,\s*/g, ',')
-    // Remove last semicolon before closing brace
     .replace(/;}/g, '}')
-    // Collapse whitespace
     .replace(/\s{2,}/g, ' ')
     .trim();
 };
 
-const minifyJS = (js: string): string => {
+const minifyJSBasic = (js: string): string => {
   return js
-    // Remove single-line comments (but not URLs)
     .replace(/(?<!:)\/\/.*$/gm, '')
-    // Remove multi-line comments
     .replace(/\/\*[\s\S]*?\*\//g, '')
-    // Remove leading/trailing whitespace from lines
     .split('\n')
     .map(line => line.trim())
     .filter(line => line.length > 0)
     .join('')
-    // Collapse multiple spaces
     .replace(/\s{2,}/g, ' ')
-    // Remove spaces around operators
     .replace(/\s*([{};,=+\-*/<>!&|?:])\s*/g, '$1')
     .trim();
 };
@@ -68,6 +58,7 @@ export default function MinifierTool() {
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [stats, setStats] = useState<{ before: number; after: number } | null>(null);
+  const [mangleEnabled, setMangleEnabled] = useState(false);
 
   const handleMinify = async () => {
     if (!input.trim()) {
@@ -86,9 +77,6 @@ export default function MinifierTool() {
       let result = "";
       const beforeSize = new Blob([input]).size;
 
-      // Add small delay for UI feedback
-      await new Promise(resolve => setTimeout(resolve, 100));
-
       switch (codeType) {
         case "html":
           result = minifyHTML(input);
@@ -97,7 +85,15 @@ export default function MinifierTool() {
           result = minifyCSS(input);
           break;
         case "js":
-          result = minifyJS(input);
+          if (mangleEnabled) {
+            const terserResult = await terserMinify(input, {
+              mangle: true,
+              compress: true,
+            });
+            result = terserResult.code || "";
+          } else {
+            result = minifyJSBasic(input);
+          }
           break;
       }
 
@@ -143,7 +139,7 @@ export default function MinifierTool() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-slide-up">
+    <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -157,37 +153,35 @@ export default function MinifierTool() {
         </div>
       </div>
 
-      {/* Code Type Selector */}
-      <div className="flex items-center gap-4">
-        <label className="text-sm font-medium">Code Type:</label>
-        <Select value={codeType} onValueChange={(v) => setCodeType(v as CodeType)}>
-          <SelectTrigger className="w-32">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="html">HTML</SelectItem>
-            <SelectItem value="css">CSS</SelectItem>
-            <SelectItem value="js">JavaScript</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Code Type Selector & Options */}
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Code Type:</label>
+          <Select value={codeType} onValueChange={(v) => setCodeType(v as CodeType)}>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="html">HTML</SelectItem>
+              <SelectItem value="css">CSS</SelectItem>
+              <SelectItem value="js">JavaScript</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      {/* Input */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium flex items-center justify-between">
-          <span>Input Code</span>
-          {input && (
-            <span className="text-muted-foreground">
-              {formatBytes(new Blob([input]).size)}
-            </span>
-          )}
-        </label>
-        <Textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={`Paste your ${codeType.toUpperCase()} code here...`}
-          className="min-h-[200px]"
-        />
+        {/* Mangle option - only for JS */}
+        {codeType === "js" && (
+          <div className="flex items-center gap-2">
+            <Switch
+              id="mangle"
+              checked={mangleEnabled}
+              onCheckedChange={setMangleEnabled}
+            />
+            <Label htmlFor="mangle" className="text-sm cursor-pointer">
+              Mangle (rename variables)
+            </Label>
+          </div>
+        )}
       </div>
 
       {/* Minify Button */}
@@ -231,32 +225,53 @@ export default function MinifierTool() {
         </div>
       )}
 
-      {/* Output */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium flex items-center justify-between">
-          <span>Minified Output</span>
-          {output && (
-            <Button variant="ghost" size="sm" onClick={handleCopy} className="gap-1">
-              {copied ? (
-                <>
-                  <Check className="h-3 w-3" />
-                  Copied
-                </>
-              ) : (
-                <>
-                  <Copy className="h-3 w-3" />
-                  Copy
-                </>
-              )}
-            </Button>
-          )}
-        </label>
-        <Textarea
-          value={output}
-          readOnly
-          placeholder="Minified code will appear here..."
-          className="min-h-[200px] bg-muted/50"
-        />
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Input */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium flex items-center justify-between">
+            <span>Input Code</span>
+            {input && (
+              <span className="text-muted-foreground">
+                {formatBytes(new Blob([input]).size)}
+              </span>
+            )}
+          </label>
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={`Paste your ${codeType.toUpperCase()} code here...`}
+            className="min-h-[300px] lg:min-h-[400px] font-mono text-sm"
+          />
+        </div>
+
+        {/* Output */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium flex items-center justify-between">
+            <span>Minified Output</span>
+            {output && (
+              <Button variant="ghost" size="sm" onClick={handleCopy} className="gap-1">
+                {copied ? (
+                  <>
+                    <Check className="h-3 w-3" />
+                    Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3 w-3" />
+                    Copy
+                  </>
+                )}
+              </Button>
+            )}
+          </label>
+          <Textarea
+            value={output}
+            readOnly
+            placeholder="Minified code will appear here..."
+            className="min-h-[300px] lg:min-h-[400px] bg-muted/50 font-mono text-sm"
+          />
+        </div>
       </div>
     </div>
   );
