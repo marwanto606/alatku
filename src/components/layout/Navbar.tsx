@@ -1,12 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sun, Moon, Monitor, Menu, Wrench } from "lucide-react";
+import { Sun, Moon, Menu, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/hooks/useTheme";
 
 interface NavbarProps {
@@ -14,7 +9,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ onMenuClick }: NavbarProps) {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
   const navItems = [
@@ -62,30 +57,16 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         {/* Spacer */}
         <div className="flex-1" />
 
-        {/* Theme toggle */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
-              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="animate-scale-in">
-            <DropdownMenuItem onClick={() => setTheme("light")}>
-              <Sun className="mr-2 h-4 w-4" />
-              Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>
-              <Moon className="mr-2 h-4 w-4" />
-              Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
-              <Monitor className="mr-2 h-4 w-4" />
-              System
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Theme toggle switch */}
+        <div className="flex items-center gap-2">
+          <Sun className="h-4 w-4 text-muted-foreground" />
+          <Switch
+            checked={theme === "dark"}
+            onCheckedChange={toggleTheme}
+            aria-label="Toggle dark mode"
+          />
+          <Moon className="h-4 w-4 text-muted-foreground" />
+        </div>
       </div>
     </header>
   );

@@ -10,7 +10,7 @@ import { useTheme } from "@/hooks/useTheme";
 export default function JsonTool() {
   const [input, setInput] = useState("");
   const [copied, setCopied] = useState(false);
-  const { resolvedTheme } = useTheme();
+  const { theme } = useTheme();
 
   const parseResult = useMemo(() => {
     if (!input.trim()) {
@@ -198,7 +198,7 @@ export default function JsonTool() {
             {parseResult.valid && parseResult.data ? (
               <JsonView
                 data={parseResult.data}
-                style={resolvedTheme === "dark" ? darkStyles : defaultStyles}
+                style={theme === "dark" ? darkStyles : defaultStyles}
                 shouldExpandNode={(level) => level < 2}
               />
             ) : (
