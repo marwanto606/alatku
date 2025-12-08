@@ -23,8 +23,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           <Menu className="h-5 w-5" />
         </Button>
 
-        {/* Logo - centered on mobile */}
-        <Link to="/" className="flex items-center gap-2 flex-1 md:flex-none md:mr-8 justify-center md:justify-start">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 mr-4">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center glow-effect">
             <Wrench className="h-4 w-4 text-primary-foreground" />
           </div>
@@ -33,8 +33,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           </span>
         </Link>
 
-        {/* Nav items */}
-        <nav className="hidden md:flex items-center gap-1">
+        {/* Nav items - always visible */}
+        <nav className="flex items-center gap-1">
           <Link to="/">
             <Button variant="ghost" size="sm">
               Home
@@ -49,7 +49,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         </nav>
 
         {/* Spacer */}
-        <div className="flex-1 md:flex-initial" />
+        <div className="flex-1" />
 
         {/* Theme toggle icon button */}
         <Button
