@@ -57,15 +57,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           )}
         >
           <div className="flex flex-col h-full">
-            {/* Header with close button */}
-            <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
-              <span className="font-semibold text-sm text-muted-foreground">
-                Tools
-              </span>
-              <Button variant="ghost" size="icon" onClick={onClose}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
 
             {/* Tool links */}
             <nav className="flex-1 p-2 space-y-1 overflow-y-auto">
