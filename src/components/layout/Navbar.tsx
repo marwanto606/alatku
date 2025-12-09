@@ -1,26 +1,27 @@
 import { Link } from "react-router-dom";
-import { Sun, Moon, Menu, Wrench, ExternalLink } from "lucide-react";
+import { Sun, Moon, Menu, X, Wrench, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 
 interface NavbarProps {
+  isOpen: boolean;
   onMenuClick: () => void;
 }
 
-export function Navbar({ onMenuClick }: NavbarProps) {
+export function Navbar({ isOpen, onMenuClick }: NavbarProps) {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border glass-effect">
       <div className="flex h-16 items-center px-4 md:px-6">
-        {/* Hamburger menu button - always visible */}
+        {/* Hamburger menu button - toggles between Menu and X icon */}
         <Button
           variant="ghost"
           size="icon"
           className="mr-2"
           onClick={onMenuClick}
         >
-          <Menu className="h-5 w-5" />
+          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
 
         {/* Logo */}
