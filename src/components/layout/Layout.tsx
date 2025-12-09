@@ -11,7 +11,7 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Navbar onMenuClick={() => setSidebarOpen(true)} />
+      <Navbar isOpen={sidebarOpen} onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
       <div className="flex flex-1">
         <Sidebar
           isOpen={sidebarOpen}

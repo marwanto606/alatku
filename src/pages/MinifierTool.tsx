@@ -229,13 +229,11 @@ export default function MinifierTool() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Input */}
         <div className="space-y-2">
-          <label className="text-sm font-medium flex items-center justify-between">
+          <label className="text-sm font-medium flex items-center justify-between h-[36px]">
             <span>Input Code</span>
-            {input && (
-              <span className="text-muted-foreground">
-                {formatBytes(new Blob([input]).size)}
-              </span>
-            )}
+            <span className={`text-muted-foreground ${!input ? 'invisible' : ''}`}>
+              {input ? formatBytes(new Blob([input]).size) : '0 B'}
+            </span>
           </label>
           <Textarea
             value={input}
@@ -247,23 +245,26 @@ export default function MinifierTool() {
 
         {/* Output */}
         <div className="space-y-2">
-          <label className="text-sm font-medium flex items-center justify-between">
+          <label className="text-sm font-medium flex items-center justify-between h-[36px]">
             <span>Minified Output</span>
-            {output && (
-              <Button variant="ghost" size="sm" onClick={handleCopy} className="gap-1">
-                {copied ? (
-                  <>
-                    <Check className="h-3 w-3" />
-                    Copied
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-3 w-3" />
-                    Copy
-                  </>
-                )}
-              </Button>
-            )}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleCopy} 
+              className={`gap-1 ${!output ? 'invisible' : ''}`}
+            >
+              {copied ? (
+                <>
+                  <Check className="h-3 w-3" />
+                  Copied
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3 w-3" />
+                  Copy
+                </>
+              )}
+            </Button>
           </label>
           <Textarea
             value={output}
