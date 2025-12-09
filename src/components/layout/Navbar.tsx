@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Sun, Moon, Menu, X, Wrench, ExternalLink } from "lucide-react";
+import { Sun, Moon, Menu, X, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 
@@ -42,9 +42,8 @@ export function Navbar({ isOpen, onMenuClick }: NavbarProps) {
             </Button>
           </Link>
           <a href="https://www.marwanto606.com" target="_blank" rel="noopener noreferrer">
-            <Button variant="ghost" size="sm" className="gap-1">
+            <Button variant="ghost" size="sm">
               Blog
-              <ExternalLink className="h-3 w-3" />
             </Button>
           </a>
         </nav>

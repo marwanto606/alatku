@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { FileCode, Binary, Braces, X, Wrench, ExternalLink } from "lucide-react";
+import { FileCode, Binary, Braces, X, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -94,24 +94,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   </Link>
                 );
               })}
-              
-              {/* Blog link */}
-              <a 
-                href="https://www.marwanto606.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                onClick={onClose}
-              >
-                <div className="flex items-center gap-3 rounded-lg px-3 py-3 transition-all duration-200 group hover:bg-sidebar-accent/50 text-sidebar-foreground">
-                  <div className="h-9 w-9 rounded-lg flex items-center justify-center transition-all flex-shrink-0 bg-muted group-hover:bg-primary/20">
-                    <ExternalLink className="h-4 w-4" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">Blog</p>
-                    <p className="text-xs text-muted-foreground truncate">marwanto606.com</p>
-                  </div>
-                </div>
-              </a>
             </nav>
 
             {/* Footer */}
