@@ -38,16 +38,11 @@ const minifyCSS = (css: string): string => {
     .trim();
 };
 
-const minifyJSBasic = (js: string): string => {
-  return js
-    .replace(/(?<!:)\/\/.*$/gm, '')
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .split('\n')
-    .map(line => line.trim())
-    .filter(line => line.length > 0)
-    .join('')
-    .replace(/\s{2,}/g, ' ')
-    .replace(/\s*([{};,=+\-*/<>!&|?:])\s*/g, '$1')
+// Post-process to clean up excess whitespace (including in template literals)
+const cleanupWhitespace = (code: string): string => {
+  return code
+    .replace(/\s{2,}/g, ' ')  // multiple spaces → single space
+    .replace(/\s*\n\s*/g, '') // remove newlines and surrounding spaces
     .trim();
 };
 
@@ -85,15 +80,14 @@ export default function MinifierTool() {
           result = minifyCSS(input);
           break;
         case "js":
-          if (mangleEnabled) {
-            const terserResult = await terserMinify(input, {
-              mangle: true,
-              compress: true,
-            });
-            result = terserResult.code || "";
-          } else {
-            result = minifyJSBasic(input);
-          }
+          // Always use Terser for accurate JS parsing
+          const terserResult = await terserMinify(input, {
+            mangle: mangleEnabled,
+            compress: true,
+          });
+          let jsResult = terserResult.code || "";
+          // Post-process: clean up excess whitespace (including in template literals)
+          result = cleanupWhitespace(jsResult);
           break;
       }
 
