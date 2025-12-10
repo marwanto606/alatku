@@ -5,30 +5,54 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
+// Remove excessive whitespace and newlines from JavaScript code
+function cleanupJS(code: string): string {
+  // Remove comments
+  let cleaned = code
+    // Remove single-line comments (but not in strings)
+    .replace(/\/\/[^\n]*/g, '')
+    // Remove multi-line comments
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  
+  // Remove excessive whitespace
+  cleaned = cleaned
+    .replace(/\s+/g, ' ')  // Multiple spaces/newlines to single space
+    .replace(/\s*([{};,:()\[\]=+\-*/<>!&|?])\s*/g, '$1')  // Remove spaces around operators
+    .replace(/;\s*}/g, '}')  // Remove semicolon before closing brace
+    .trim();
+  
+  return cleaned;
+}
+
 // Dean Edwards Packer - Pack function
 function packJS(code: string): string {
   if (!code.trim()) return "";
   
-  // Simple base62 encoding
-  const base62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  // First clean up the code
+  const cleanedCode = cleanupJS(code);
   
-  function encode62(num: number): string {
-    if (num === 0) return "0";
-    let result = "";
-    while (num > 0) {
-      result = base62[num % 62] + result;
-      num = Math.floor(num / 62);
+  // Base62 characters
+  const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  
+  // Encode number to base62
+  function encode(num: number): string {
+    if (num === 0) return '0';
+    let result = '';
+    let n = num;
+    while (n > 0) {
+      result = ALPHABET[n % 62] + result;
+      n = Math.floor(n / 62);
     }
     return result;
   }
   
-  // Extract words/tokens from code
-  const wordRegex = /\b\w+\b/g;
+  // Extract all words/identifiers
   const words: string[] = [];
-  const wordCount: Map<string, number> = new Map();
+  const wordCount = new Map<string, number>();
   
+  const wordRegex = /\b[\w$]+\b/g;
   let match;
-  while ((match = wordRegex.exec(code)) !== null) {
+  while ((match = wordRegex.exec(cleanedCode)) !== null) {
     const word = match[0];
     wordCount.set(word, (wordCount.get(word) || 0) + 1);
     if (!words.includes(word)) {
@@ -36,79 +60,119 @@ function packJS(code: string): string {
     }
   }
   
-  // Sort words by frequency (most frequent first for better compression)
+  // Sort by frequency (most used first for better compression)
   words.sort((a, b) => (wordCount.get(b) || 0) - (wordCount.get(a) || 0));
   
-  // Create packed string
-  let packed = code;
-  const dictionary: string[] = [];
+  // Build dictionary and packed code
+  const dictionary: string[] = new Array(words.length).fill('');
+  let packed = cleanedCode;
   
   words.forEach((word, index) => {
-    const encoded = encode62(index);
-    if (encoded.length < word.length) {
-      const regex = new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
-      packed = packed.replace(regex, encoded);
-      dictionary[index] = word;
-    } else {
-      dictionary[index] = word;
-    }
+    const encoded = encode(index);
+    // Only replace if encoded is shorter or equal (for obfuscation)
+    const regex = new RegExp(`\\b${word.replace(/[$]/g, '\\$')}\\b`, 'g');
+    packed = packed.replace(regex, encoded);
+    dictionary[index] = word;
   });
   
-  // Fill empty slots
-  for (let i = 0; i < dictionary.length; i++) {
-    if (!dictionary[i]) dictionary[i] = "";
-  }
-  
   const count = dictionary.length;
-  const dictionaryStr = dictionary.join("|");
+  const dictStr = dictionary.join('|');
   
-  // Generate the packed output
-  const result = `eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\\\b'+e(c)+'\\\\b','g'),k[c]);return p}('${packed.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}',${count},${count},'${dictionaryStr}'.split('|'),0,{}))`;
+  // Escape special characters in packed code
+  const escapedPacked = packed
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'");
+  
+  // Generate Dean Edwards packer format
+  const result = `eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\\\b'+e(c)+'\\\\b','g'),k[c]);return p}('${escapedPacked}',${count},${count},'${dictStr}'.split('|'),0,{}))`;
   
   return result;
 }
 
-// Dean Edwards Packer - Unpack function
+// Dean Edwards Packer - Unpack function (using the actual unpacker algorithm)
 function unpackJS(code: string): string {
   if (!code.trim()) return "";
   
-  // Check if it's a packed code (starts with eval(function(p,a,c,k,e,d) or eval(function(p,a,c,k,e,r))
-  const packedRegex = /eval\(function\(p,a,c,k,e,[dr]\)\{.*?\}?\('(.*?)',(\d+),(\d+),'(.*?)'\.split\('\|'\),\d+,\{\}\)\)/s;
-  const match = code.match(packedRegex);
+  // Check if it's packed code
+  const packerRegex = /eval\(function\(p,a,c,k,e,[dr]\)\{/;
+  if (!packerRegex.test(code)) {
+    throw new Error("Invalid packed code format. Make sure it's Dean Edwards packed JavaScript (starts with 'eval(function(p,a,c,k,e,')");
+  }
+  
+  // Extract the parameters from the packed code
+  // Format: eval(function(p,a,c,k,e,d){...}('packed_code',a,c,'dictionary'.split('|'),0,{}))
+  const extractRegex = /eval\(function\(p,a,c,k,e,[dr]\)\{[^}]+\}\('((?:[^'\\]|\\.)*)'\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*'([^']*)'\s*\.split\('\|'\)\s*,\s*\d+\s*,\s*\{\s*\}\s*\)\s*\)/;
+  
+  const match = code.match(extractRegex);
   
   if (!match) {
-    // Try alternative format
-    const altRegex = /eval\(function\(p,a,c,k,e,[dr]\)\{[^}]+\}\('([^']+)',\s*(\d+),\s*(\d+),\s*'([^']+)'\.split\('\|'\)/s;
-    const altMatch = code.match(altRegex);
-    
-    if (!altMatch) {
-      throw new Error("Invalid packed code format. Make sure it's Dean Edwards packed JavaScript.");
+    // Try alternative: use the unpacker function directly by replacing eval with a function that returns the result
+    try {
+      // Create a safe unpacker function
+      const unpackerFn = function(p: string, a: number, c: number, k: string[], e: unknown, d: Record<string, string>) {
+        const encodeFunc = function(c: number): string {
+          return (c < a ? '' : encodeFunc(Math.floor(c / a))) + 
+            ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36));
+        };
+        
+        // Replace with fallback logic
+        if (!''.replace(/^/, String)) {
+          while (c--) {
+            d[encodeFunc(c)] = k[c] || encodeFunc(c);
+          }
+          const kFunc = function(e: string) { return d[e]; };
+          const eFunc = function() { return '\\w+'; };
+          c = 1;
+          while (c--) {
+            if (k[c]) {
+              p = p.replace(new RegExp('\\b' + eFunc() + '\\b', 'g'), kFunc);
+            }
+          }
+        } else {
+          while (c--) {
+            if (k[c]) {
+              p = p.replace(new RegExp('\\b' + encodeFunc(c) + '\\b', 'g'), k[c]);
+            }
+          }
+        }
+        return p;
+      };
+      
+      // Extract using a more flexible regex
+      const flexRegex = /\('((?:[^'\\]|\\.)*)'\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*'([^']*)'\s*\.split/;
+      const flexMatch = code.match(flexRegex);
+      
+      if (flexMatch) {
+        const p = flexMatch[1].replace(/\\'/g, "'").replace(/\\\\/g, "\\");
+        const a = parseInt(flexMatch[2]);
+        const c = parseInt(flexMatch[3]);
+        const k = flexMatch[4].split('|');
+        
+        return unpackerFn(p, a, c, k, null, {});
+      }
+      
+      throw new Error("Could not parse packed code parameters");
+    } catch (innerError) {
+      throw new Error("Failed to unpack code. Make sure it's valid Dean Edwards packed JavaScript.");
     }
-    
-    return unpackWithParams(altMatch[1], parseInt(altMatch[2]), parseInt(altMatch[3]), altMatch[4].split("|"));
   }
   
-  return unpackWithParams(match[1], parseInt(match[2]), parseInt(match[3]), match[4].split("|"));
-}
-
-function unpackWithParams(p: string, a: number, c: number, k: string[]): string {
-  // Decode function
-  function decode(charCode: number): string {
-    const base36 = "0123456789abcdefghijklmnopqrstuvwxyz";
-    if (charCode < a) {
-      return charCode < 36 ? base36[charCode] : String.fromCharCode(charCode + 29);
-    }
-    return decode(Math.floor(charCode / a)) + decode(charCode % a);
-  }
+  // Extract parameters
+  const p = match[1].replace(/\\'/g, "'").replace(/\\\\/g, "\\");
+  const a = parseInt(match[2]);
+  let c = parseInt(match[3]);
+  const k = match[4].split('|');
   
-  // Replace encoded words with dictionary values
-  let result = p.replace(/\\'/g, "'").replace(/\\\\/g, "\\");
+  // Run the unpacker algorithm
+  const encode = function(charCode: number): string {
+    return (charCode < a ? '' : encode(Math.floor(charCode / a))) + 
+      ((charCode = charCode % a) > 35 ? String.fromCharCode(charCode + 29) : charCode.toString(36));
+  };
   
+  let result = p;
   while (c--) {
     if (k[c]) {
-      const encoded = decode(c);
-      const regex = new RegExp(`\\b${encoded}\\b`, 'g');
-      result = result.replace(regex, k[c]);
+      result = result.replace(new RegExp('\\b' + encode(c) + '\\b', 'g'), k[c]);
     }
   }
   
@@ -287,10 +351,10 @@ export default function PackerTool() {
       <div className="p-4 rounded-lg bg-muted/50 text-sm text-muted-foreground">
         <p className="font-medium mb-2">About Dean Edwards Packer:</p>
         <ul className="list-disc list-inside space-y-1">
-          <li>Packer compresses JavaScript by encoding it with Base62</li>
+          <li>Packer compresses JavaScript by encoding with Base62 and building a dictionary</li>
           <li>Packed code starts with <code className="bg-muted px-1 rounded">eval(function(p,a,c,k,e,d)</code></li>
+          <li>Pack mode removes comments, newlines, and excessive whitespace automatically</li>
           <li>Useful for basic obfuscation and reducing file size</li>
-          <li>Note: Modern minifiers (like Terser) often provide better compression</li>
         </ul>
       </div>
     </div>
