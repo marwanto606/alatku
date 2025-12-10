@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FileCode, Binary, Braces, ArrowRight, Zap } from "lucide-react";
+import { FileCode, Binary, Braces, Package, ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const tools = [
@@ -23,6 +23,13 @@ const tools = [
     description: "Parse, format, and visualize JSON data with syntax highlighting and error detection.",
     icon: Braces,
     features: ["Pretty print", "Error detection", "Tree view"],
+  },
+  {
+    path: "/packer",
+    title: "JS Packer / Unpacker",
+    description: "Pack JavaScript using Dean Edwards Packer format or unpack packed code.",
+    icon: Package,
+    features: ["Pack JavaScript", "Unpack code", "Base62 encoding"],
   },
 ];
 
@@ -86,7 +93,7 @@ export default function Home() {
       {/* Stats Section */}
       <section className="grid grid-cols-3 gap-4 py-8">
         {[
-          { label: "Tools Available", value: "3" },
+          { label: "Tools Available", value: "4" },
           { label: "100% Free", value: "✓" },
           { label: "No Signup", value: "✓" },
         ].map((stat) => (

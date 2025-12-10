@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import MinifierTool from "./pages/MinifierTool";
 import Base64Tool from "./pages/Base64Tool";
 import JsonTool from "./pages/JsonTool";
+import PackerTool from "./pages/PackerTool";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
               <Route path="/minifier" element={<MinifierTool />} />
               <Route path="/base64" element={<Base64Tool />} />
               <Route path="/json" element={<JsonTool />} />
+              <Route path="/packer" element={<PackerTool />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

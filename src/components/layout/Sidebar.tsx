@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { FileCode, Binary, Braces, X, Wrench } from "lucide-react";
+import { FileCode, Binary, Braces, Package, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -32,6 +32,12 @@ const tools = [
     label: "JSON Viewer",
     icon: Braces,
     description: "Parse & Format",
+  },
+  {
+    path: "/packer",
+    label: "JS Packer",
+    icon: Package,
+    description: "Pack & Unpack",
   },
 ];
 
