@@ -3,6 +3,7 @@ import { Binary, Copy, Check, ArrowRightLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 export default function Base64Tool() {
   const [input, setInput] = useState("");
@@ -121,9 +122,11 @@ export default function Base64Tool() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Input */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">
-            Input {mode === "encode" ? "(Plain Text)" : "(Base64 String)"}
-          </label>
+          <div className="flex items-center justify-between h-8">
+            <label className="text-sm font-medium">
+              Input {mode === "encode" ? "(Plain Text)" : "(Base64 String)"}
+            </label>
+          </div>
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -138,26 +141,29 @@ export default function Base64Tool() {
 
         {/* Output */}
         <div className="space-y-2">
-          <label className="text-sm font-medium flex items-center justify-between">
-            <span>
+          <div className="flex items-center justify-between h-8">
+            <label className="text-sm font-medium">
               Output {mode === "encode" ? "(Base64)" : "(Plain Text)"}
-            </span>
-            {output && (
-              <Button variant="ghost" size="sm" onClick={handleCopy} className="gap-1">
-                {copied ? (
-                  <>
-                    <Check className="h-3 w-3" />
-                    Copied
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-3 w-3" />
-                    Copy
-                  </>
-                )}
-              </Button>
-            )}
-          </label>
+            </label>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleCopy} 
+              className={cn("gap-1", !output && "invisible")}
+            >
+              {copied ? (
+                <>
+                  <Check className="h-3 w-3" />
+                  Copied
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3 w-3" />
+                  Copy
+                </>
+              )}
+            </Button>
+          </div>
           <Textarea
             value={output}
             readOnly
