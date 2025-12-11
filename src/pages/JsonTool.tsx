@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Helmet } from "react-helmet-async";
 import { Braces, Copy, Check, AlertCircle, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -103,8 +104,18 @@ export default function JsonTool() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 animate-slide-up">
-      {/* Header */}
+    <>
+      <Helmet>
+        <title>JSON Viewer Parser Online - Format & Validate JSON | Alatku606</title>
+        <meta name="description" content="Parse, format, dan visualisasi JSON data secara online. JSON viewer dengan syntax highlighting, error detection, dan tree view gratis." />
+        <meta name="keywords" content="json viewer, json parser, json formatter, json validator, json online, format json, pretty print json, json tree view" />
+        <link rel="canonical" href="https://alatku606.lovable.app/json" />
+        <meta property="og:title" content="JSON Viewer Parser Online - Format & Validate JSON" />
+        <meta property="og:description" content="Parse, format, dan visualisasi JSON data secara online dengan syntax highlighting dan tree view." />
+        <meta property="og:url" content="https://alatku606.lovable.app/json" />
+      </Helmet>
+      <div className="max-w-5xl mx-auto space-y-6 animate-slide-up">
+        {/* Header */}
       <div className="flex items-center gap-3">
         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
           <Braces className="h-5 w-5 text-primary" />
@@ -222,6 +233,7 @@ export default function JsonTool() {
           <li>• Click on nodes in the tree view to expand/collapse</li>
         </ul>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

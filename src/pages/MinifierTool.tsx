@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { FileCode, Copy, Check, Loader2, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -133,8 +134,18 @@ export default function MinifierTool() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
-      {/* Header */}
+    <>
+      <Helmet>
+        <title>Code Minifier - Compress HTML, CSS, JavaScript | Alatku606</title>
+        <meta name="description" content="Minify dan compress code HTML, CSS, dan JavaScript secara gratis. Kurangi ukuran file dan tingkatkan kecepatan loading website Anda." />
+        <meta name="keywords" content="code minifier, html minifier, css minifier, javascript minifier, compress code, minify online, reduce file size" />
+        <link rel="canonical" href="https://alatku606.lovable.app/minifier" />
+        <meta property="og:title" content="Code Minifier - Compress HTML, CSS, JavaScript" />
+        <meta property="og:description" content="Minify dan compress code HTML, CSS, dan JavaScript secara gratis." />
+        <meta property="og:url" content="https://alatku606.lovable.app/minifier" />
+      </Helmet>
+      <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
+        {/* Header */}
       <div className="flex items-center gap-3">
         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
           <FileCode className="h-5 w-5 text-primary" />
@@ -268,6 +279,7 @@ export default function MinifierTool() {
           />
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
