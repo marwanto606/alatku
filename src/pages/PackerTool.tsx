@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Copy, Check, Package, PackageOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -237,8 +238,18 @@ export default function PackerTool() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
-      {/* Header */}
+    <>
+      <Helmet>
+        <title>JS Packer Unpacker Online - Dean Edwards Packer | Alatku606</title>
+        <meta name="description" content="Pack dan unpack JavaScript code menggunakan Dean Edwards Packer format secara online dan gratis. Compress JS dengan Base62 encoding." />
+        <meta name="keywords" content="js packer, js unpacker, javascript packer, dean edwards packer, pack javascript, unpack javascript, base62 encoding" />
+        <link rel="canonical" href="https://alatku606.lovable.app/packer" />
+        <meta property="og:title" content="JS Packer Unpacker Online - Dean Edwards Packer" />
+        <meta property="og:description" content="Pack dan unpack JavaScript code menggunakan Dean Edwards Packer format secara online dan gratis." />
+        <meta property="og:url" content="https://alatku606.lovable.app/packer" />
+      </Helmet>
+      <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
+        {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">JS Packer / Unpacker</h1>
         <p className="text-muted-foreground">
@@ -357,6 +368,7 @@ export default function PackerTool() {
           <li>Useful for basic obfuscation and reducing file size</li>
         </ul>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

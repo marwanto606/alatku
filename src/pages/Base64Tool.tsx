@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Binary, Copy, Check, ArrowRightLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -78,8 +79,18 @@ export default function Base64Tool() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
-      {/* Header */}
+    <>
+      <Helmet>
+        <title>Base64 Encoder Decoder Online - Gratis | Alatku606</title>
+        <meta name="description" content="Encode text ke Base64 atau decode Base64 string ke plain text secara online dan gratis. Tool Base64 yang cepat dan mudah digunakan." />
+        <meta name="keywords" content="base64 encoder, base64 decoder, encode base64, decode base64, base64 online, text to base64, base64 to text" />
+        <link rel="canonical" href="https://alatku606.lovable.app/base64" />
+        <meta property="og:title" content="Base64 Encoder Decoder Online - Gratis" />
+        <meta property="og:description" content="Encode text ke Base64 atau decode Base64 string ke plain text secara online dan gratis." />
+        <meta property="og:url" content="https://alatku606.lovable.app/base64" />
+      </Helmet>
+      <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
+        {/* Header */}
       <div className="flex items-center gap-3">
         <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
           <Binary className="h-5 w-5 text-primary" />
@@ -182,6 +193,7 @@ export default function Base64Tool() {
           encode data in URLs, and transmit data that might otherwise be misinterpreted.
         </p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
