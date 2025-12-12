@@ -41,13 +41,16 @@ export default function Home() {
         <title>Alatku606 - Free Developer Tools | Minifier, Base64, JSON, Packer</title>
         <meta name="description" content="Koleksi tools developer gratis untuk minify code HTML/CSS/JS, encode Base64, parse JSON, dan pack JavaScript. Cepat, mudah, dan selalu gratis tanpa signup." />
         <meta name="keywords" content="developer tools, code minifier, base64 encoder decoder, json viewer parser, js packer unpacker, html minifier, css minifier, javascript minifier, tools gratis" />
-        <link rel="canonical" href="https://alatku606.lovable.app/" />
+        <link rel="canonical" href="https://alatku.lovable.app/" />
         <meta property="og:title" content="Alatku606 - Free Developer Tools" />
         <meta property="og:description" content="Koleksi tools developer gratis untuk minify code, encode Base64, parse JSON, dan pack JavaScript." />
-        <meta property="og:url" content="https://alatku606.lovable.app/" />
+        <meta property="og:url" content="https://alatku.lovable.app/" />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://alatku.lovable.app/favicon.ico" />
+        <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="Alatku606 - Free Developer Tools" />
         <meta name="twitter:description" content="Koleksi tools developer gratis untuk minify code, encode Base64, parse JSON, dan pack JavaScript." />
+        <meta name="twitter:image" content="https://alatku.lovable.app/favicon.ico" />
       </Helmet>
       <div className="max-w-5xl mx-auto space-y-12">
       {/* Hero Section */}

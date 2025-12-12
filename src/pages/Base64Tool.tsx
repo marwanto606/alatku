@@ -84,10 +84,16 @@ export default function Base64Tool() {
         <title>Base64 Encoder Decoder Online - Gratis | Alatku606</title>
         <meta name="description" content="Encode text ke Base64 atau decode Base64 string ke plain text secara online dan gratis. Tool Base64 yang cepat dan mudah digunakan." />
         <meta name="keywords" content="base64 encoder, base64 decoder, encode base64, decode base64, base64 online, text to base64, base64 to text" />
-        <link rel="canonical" href="https://alatku606.lovable.app/base64" />
+        <link rel="canonical" href="https://alatku.lovable.app/base64" />
         <meta property="og:title" content="Base64 Encoder Decoder Online - Gratis" />
         <meta property="og:description" content="Encode text ke Base64 atau decode Base64 string ke plain text secara online dan gratis." />
-        <meta property="og:url" content="https://alatku606.lovable.app/base64" />
+        <meta property="og:url" content="https://alatku.lovable.app/base64" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://alatku.lovable.app/favicon.ico" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Base64 Encoder Decoder Online - Gratis" />
+        <meta name="twitter:description" content="Encode text ke Base64 atau decode Base64 string ke plain text secara online dan gratis." />
+        <meta name="twitter:image" content="https://alatku.lovable.app/favicon.ico" />
       </Helmet>
       <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
         {/* Header */}

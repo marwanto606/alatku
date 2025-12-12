@@ -243,10 +243,16 @@ export default function PackerTool() {
         <title>JS Packer Unpacker Online - Dean Edwards Packer | Alatku606</title>
         <meta name="description" content="Pack dan unpack JavaScript code menggunakan Dean Edwards Packer format secara online dan gratis. Compress JS dengan Base62 encoding." />
         <meta name="keywords" content="js packer, js unpacker, javascript packer, dean edwards packer, pack javascript, unpack javascript, base62 encoding" />
-        <link rel="canonical" href="https://alatku606.lovable.app/packer" />
+        <link rel="canonical" href="https://alatku.lovable.app/packer" />
         <meta property="og:title" content="JS Packer Unpacker Online - Dean Edwards Packer" />
         <meta property="og:description" content="Pack dan unpack JavaScript code menggunakan Dean Edwards Packer format secara online dan gratis." />
-        <meta property="og:url" content="https://alatku606.lovable.app/packer" />
+        <meta property="og:url" content="https://alatku.lovable.app/packer" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://alatku.lovable.app/favicon.ico" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="JS Packer Unpacker Online - Dean Edwards Packer" />
+        <meta name="twitter:description" content="Pack dan unpack JavaScript code menggunakan Dean Edwards Packer format secara online dan gratis." />
+        <meta name="twitter:image" content="https://alatku.lovable.app/favicon.ico" />
       </Helmet>
       <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
         {/* Header */}
