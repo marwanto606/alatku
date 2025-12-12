@@ -1,12 +1,125 @@
 import { useState, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Braces, Copy, Check, AlertCircle, CheckCircle } from "lucide-react";
+import { Braces, Copy, Check, AlertCircle, CheckCircle, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { JsonView, darkStyles, defaultStyles } from "react-json-view-lite";
-import "react-json-view-lite/dist/index.css";
 import { useTheme } from "@/hooks/useTheme";
+
+// Custom JSON Tree View component with array count display
+interface JsonTreeProps {
+  data: any;
+  level?: number;
+  fieldName?: string;
+  isLast?: boolean;
+}
+
+function JsonTree({ data, level = 0, fieldName, isLast = true }: JsonTreeProps) {
+  const [expanded, setExpanded] = useState(level < 2);
+  const { theme } = useTheme();
+  
+  const isDark = theme === "dark";
+  const indent = level * 16;
+  
+  const styles = {
+    key: isDark ? "text-purple-400" : "text-purple-600",
+    string: isDark ? "text-green-400" : "text-green-600",
+    number: isDark ? "text-blue-400" : "text-blue-600",
+    boolean: isDark ? "text-yellow-400" : "text-yellow-600",
+    null: isDark ? "text-gray-500" : "text-gray-500",
+    punctuation: isDark ? "text-gray-400" : "text-gray-500",
+    count: isDark ? "text-gray-500" : "text-gray-400",
+  };
+
+  const renderValue = (value: any): JSX.Element => {
+    if (value === null) return <span className={styles.null}>null</span>;
+    if (value === undefined) return <span className={styles.null}>undefined</span>;
+    
+    switch (typeof value) {
+      case "string":
+        return <span className={styles.string}>"{value}"</span>;
+      case "number":
+        return <span className={styles.number}>{value}</span>;
+      case "boolean":
+        return <span className={styles.boolean}>{value.toString()}</span>;
+      default:
+        return <span>{String(value)}</span>;
+    }
+  };
+
+  const isObject = data !== null && typeof data === "object";
+  const isArray = Array.isArray(data);
+  const hasChildren = isObject && Object.keys(data).length > 0;
+  const count = isObject ? Object.keys(data).length : 0;
+  const comma = isLast ? "" : ",";
+
+  if (!isObject) {
+    return (
+      <div style={{ marginLeft: indent }} className="font-mono text-sm leading-6">
+        {fieldName !== undefined && (
+          <>
+            <span className={styles.key}>"{fieldName}"</span>
+            <span className={styles.punctuation}>: </span>
+          </>
+        )}
+        {renderValue(data)}
+        <span className={styles.punctuation}>{comma}</span>
+      </div>
+    );
+  }
+
+  const openBracket = isArray ? "[" : "{";
+  const closeBracket = isArray ? "]" : "}";
+  const entries = Object.entries(data);
+
+  return (
+    <div style={{ marginLeft: indent }} className="font-mono text-sm">
+      <div 
+        className="flex items-center cursor-pointer hover:opacity-80 leading-6"
+        onClick={() => hasChildren && setExpanded(!expanded)}
+      >
+        {hasChildren && (
+          <span className={`${styles.punctuation} mr-1`}>
+            {expanded ? <ChevronDown className="h-3 w-3 inline" /> : <ChevronRight className="h-3 w-3 inline" />}
+          </span>
+        )}
+        {fieldName !== undefined && (
+          <>
+            <span className={styles.key}>"{fieldName}"</span>
+            <span className={styles.punctuation}>: </span>
+          </>
+        )}
+        {isArray && <span className={styles.count}>[{count}]</span>}
+        <span className={styles.punctuation}>{openBracket}</span>
+        {!expanded && hasChildren && (
+          <>
+            <span className={styles.count}>...</span>
+            <span className={styles.punctuation}>{closeBracket}{comma}</span>
+          </>
+        )}
+        {!hasChildren && (
+          <span className={styles.punctuation}>{closeBracket}{comma}</span>
+        )}
+      </div>
+      {expanded && hasChildren && (
+        <>
+          {entries.map(([key, value], index) => (
+            <JsonTree
+              key={key}
+              data={value}
+              level={level + 1}
+              fieldName={isArray ? undefined : key}
+              isLast={index === entries.length - 1}
+            />
+          ))}
+          <div style={{ marginLeft: 16 }} className="leading-6">
+            <span className={styles.punctuation}>{closeBracket}{comma}</span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 export default function JsonTool() {
   const [input, setInput] = useState("");
@@ -212,13 +325,9 @@ export default function JsonTool() {
         {/* Viewer Section */}
         <div className="space-y-4">
           <label className="text-sm font-medium">Tree View</label>
-          <div className="min-h-[300px] lg:min-h-[400px] rounded-lg border border-border bg-card p-4 overflow-auto">
+          <div className={`min-h-[300px] lg:min-h-[400px] rounded-lg border border-border p-4 overflow-auto ${theme === "dark" ? "bg-[#0c1322]" : "bg-white"}`}>
             {parseResult.valid && parseResult.data ? (
-              <JsonView
-                data={parseResult.data}
-                style={theme === "dark" ? darkStyles : defaultStyles}
-                shouldExpandNode={(level) => level < 2}
-              />
+              <JsonTree data={parseResult.data} />
             ) : (
               <div className="h-full flex items-center justify-center text-muted-foreground">
                 {input.trim()
