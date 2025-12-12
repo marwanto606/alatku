@@ -248,12 +248,12 @@ export default function PackerTool() {
         <meta property="og:description" content="Pack dan unpack JavaScript code menggunakan Dean Edwards Packer format secara online dan gratis." />
         <meta property="og:url" content="https://alatku.lovable.app/packer" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://alatku.lovable.app/og-image.png" />
+        <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/033cc045-9987-46b8-8f47-899754264144/id-preview-9a1da771--cbe93006-7f07-4f36-bc50-4ae411efea33.lovable.app-1765417392799.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@marwanto606" />
         <meta name="twitter:title" content="JS Packer Unpacker Online - Dean Edwards Packer" />
         <meta name="twitter:description" content="Pack dan unpack JavaScript code menggunakan Dean Edwards Packer format secara online dan gratis." />
-        <meta name="twitter:image" content="https://alatku.lovable.app/og-image.png" />
+        <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/033cc045-9987-46b8-8f47-899754264144/id-preview-9a1da771--cbe93006-7f07-4f36-bc50-4ae411efea33.lovable.app-1765417392799.png" />
       </Helmet>
       <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
         {/* Header */}
