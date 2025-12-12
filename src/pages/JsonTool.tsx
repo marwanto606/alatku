@@ -248,10 +248,10 @@ export default function JsonTool() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-6 items-start">
         {/* Input Section */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between h-5">
             <label className="text-sm font-medium">JSON Input</label>
             <div className="flex items-center gap-2">
               {parseResult.valid !== null && (
@@ -324,7 +324,9 @@ export default function JsonTool() {
 
         {/* Viewer Section */}
         <div className="space-y-4">
-          <label className="text-sm font-medium">Tree View</label>
+          <div className="h-5 flex items-center">
+            <label className="text-sm font-medium">Tree View</label>
+          </div>
           <div className={`min-h-[300px] lg:min-h-[400px] rounded-lg border border-border p-4 overflow-auto ${theme === "dark" ? "bg-[#0c1322]" : "bg-white"}`}>
             {parseResult.valid && parseResult.data ? (
               <JsonTree data={parseResult.data} />
