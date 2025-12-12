@@ -46,11 +46,12 @@ export default function Home() {
         <meta property="og:description" content="Koleksi tools developer gratis untuk minify code, encode Base64, parse JSON, dan pack JavaScript." />
         <meta property="og:url" content="https://alatku.lovable.app/" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://alatku.lovable.app/favicon.ico" />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:image" content="https://alatku.lovable.app/og-image.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@marwanto606" />
         <meta name="twitter:title" content="Alatku606 - Free Developer Tools" />
         <meta name="twitter:description" content="Koleksi tools developer gratis untuk minify code, encode Base64, parse JSON, dan pack JavaScript." />
-        <meta name="twitter:image" content="https://alatku.lovable.app/favicon.ico" />
+        <meta name="twitter:image" content="https://alatku.lovable.app/og-image.png" />
       </Helmet>
       <div className="max-w-5xl mx-auto space-y-12">
       {/* Hero Section */}
