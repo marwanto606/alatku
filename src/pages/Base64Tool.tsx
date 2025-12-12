@@ -89,11 +89,12 @@ export default function Base64Tool() {
         <meta property="og:description" content="Encode text ke Base64 atau decode Base64 string ke plain text secara online dan gratis." />
         <meta property="og:url" content="https://alatku.lovable.app/base64" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://alatku.lovable.app/favicon.ico" />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:image" content="https://alatku.lovable.app/og-image.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@marwanto606" />
         <meta name="twitter:title" content="Base64 Encoder Decoder Online - Gratis" />
         <meta name="twitter:description" content="Encode text ke Base64 atau decode Base64 string ke plain text secara online dan gratis." />
-        <meta name="twitter:image" content="https://alatku.lovable.app/favicon.ico" />
+        <meta name="twitter:image" content="https://alatku.lovable.app/og-image.png" />
       </Helmet>
       <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
         {/* Header */}

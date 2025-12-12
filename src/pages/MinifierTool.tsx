@@ -144,11 +144,12 @@ export default function MinifierTool() {
         <meta property="og:description" content="Minify dan compress code HTML, CSS, dan JavaScript secara gratis." />
         <meta property="og:url" content="https://alatku.lovable.app/minifier" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://alatku.lovable.app/favicon.ico" />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:image" content="https://alatku.lovable.app/og-image.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@marwanto606" />
         <meta name="twitter:title" content="Code Minifier - Compress HTML, CSS, JavaScript" />
         <meta name="twitter:description" content="Minify dan compress code HTML, CSS, dan JavaScript secara gratis." />
-        <meta name="twitter:image" content="https://alatku.lovable.app/favicon.ico" />
+        <meta name="twitter:image" content="https://alatku.lovable.app/og-image.png" />
       </Helmet>
       <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
         {/* Header */}
