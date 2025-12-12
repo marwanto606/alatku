@@ -109,10 +109,16 @@ export default function JsonTool() {
         <title>JSON Viewer Parser Online - Format & Validate JSON | Alatku606</title>
         <meta name="description" content="Parse, format, dan visualisasi JSON data secara online. JSON viewer dengan syntax highlighting, error detection, dan tree view gratis." />
         <meta name="keywords" content="json viewer, json parser, json formatter, json validator, json online, format json, pretty print json, json tree view" />
-        <link rel="canonical" href="https://alatku606.lovable.app/json" />
+        <link rel="canonical" href="https://alatku.lovable.app/json" />
         <meta property="og:title" content="JSON Viewer Parser Online - Format & Validate JSON" />
         <meta property="og:description" content="Parse, format, dan visualisasi JSON data secara online dengan syntax highlighting dan tree view." />
-        <meta property="og:url" content="https://alatku606.lovable.app/json" />
+        <meta property="og:url" content="https://alatku.lovable.app/json" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://alatku.lovable.app/favicon.ico" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="JSON Viewer Parser Online - Format & Validate JSON" />
+        <meta name="twitter:description" content="Parse, format, dan visualisasi JSON data secara online dengan syntax highlighting dan tree view." />
+        <meta name="twitter:image" content="https://alatku.lovable.app/favicon.ico" />
       </Helmet>
       <div className="max-w-5xl mx-auto space-y-6 animate-slide-up">
         {/* Header */}

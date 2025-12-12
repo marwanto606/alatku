@@ -139,10 +139,16 @@ export default function MinifierTool() {
         <title>Code Minifier - Compress HTML, CSS, JavaScript | Alatku606</title>
         <meta name="description" content="Minify dan compress code HTML, CSS, dan JavaScript secara gratis. Kurangi ukuran file dan tingkatkan kecepatan loading website Anda." />
         <meta name="keywords" content="code minifier, html minifier, css minifier, javascript minifier, compress code, minify online, reduce file size" />
-        <link rel="canonical" href="https://alatku606.lovable.app/minifier" />
+        <link rel="canonical" href="https://alatku.lovable.app/minifier" />
         <meta property="og:title" content="Code Minifier - Compress HTML, CSS, JavaScript" />
         <meta property="og:description" content="Minify dan compress code HTML, CSS, dan JavaScript secara gratis." />
-        <meta property="og:url" content="https://alatku606.lovable.app/minifier" />
+        <meta property="og:url" content="https://alatku.lovable.app/minifier" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://alatku.lovable.app/favicon.ico" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Code Minifier - Compress HTML, CSS, JavaScript" />
+        <meta name="twitter:description" content="Minify dan compress code HTML, CSS, dan JavaScript secara gratis." />
+        <meta name="twitter:image" content="https://alatku.lovable.app/favicon.ico" />
       </Helmet>
       <div className="max-w-6xl mx-auto space-y-6 animate-slide-up">
         {/* Header */}
